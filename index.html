@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,25 +7,31 @@
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
-      background: #f0f0f0;
+      background: #f9f9f9;
     }
     .quiz-container {
-      background: white;
+      background: #fff;
       padding: 20px;
       max-width: 800px;
       margin: auto;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
     }
     h2 {
       text-align: center;
+      margin-bottom: 30px;
     }
     .question {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fefefe;
     }
     .options label {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
+      cursor: pointer;
     }
     .result {
       margin-top: 10px;
@@ -35,6 +40,123 @@
     .correct {
       color: green;
     }
+    .wrong {
+      color: red;
+    }
+    button {
+      display: block;
+      margin: 30px auto;
+      padding: 12px 30px;
+      border: none;
+      background: #007bff;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h2>English Grammar Quiz</h2>
+    <div id="quiz"></div>
+    <button onclick="submitQuiz()">Submit Answers</button>
+    <div id="score"></div>
+  </div>
+  <footer>Developed by Zeyad Hany</footer>
+  <script>
+    const questions = [
+      { q: "Which sentence is grammatically correct?", options: ["He going to school every day.", "He go to the school every days.", "He goes to school every day."], answer: 2 },
+      { q: "Identify the correct sentence:", options: ["They were playing football.", "They were play football.", "They was played football."], answer: 0 },
+      { q: "Choose the correct sentence:", options: ["I can to swims very well.", "I can swimming very well.", "I can swim very well."], answer: 2 },
+      { q: "Which one is correct?", options: ["She don't likes coffee.", "She didn't like coffee.", "She doesn't like coffee."], answer: 2 },
+      { q: "Find the correct sentence:", options: ["We was lateness to meeting.", "We were late to the meeting.", "We was late in meeting."], answer: 1 },
+      { q: "What is the correct form?", options: ["Do he goes to the gym?", "Does he going to the gym?", "Does he go to the gym?"], answer: 2 },
+      { q: "Choose the grammatically correct sentence:", options: ["She has two children.", "She has two child.", "She have two childs."], answer: 0 },
+      { q: "Pick the right option:", options: ["He didn't knew the answer.", "He doesn't knew the answer.", "He didn't know the answer."], answer: 2 },
+      { q: "Select the correct sentence:", options: ["There is many car in the street.", "There are much cars in the street.", "There are many cars in the street."], answer: 2 },
+      { q: "Which one is correct?", options: ["I'm agreed you.", "I agree with you.", "I am agreed with you."], answer: 1 },
+      { q: "Identify the correct structure:", options: ["She can singing beautifully.", "She can sing beautifully.", "She cans sings beautifully."], answer: 1 },
+      { q: "Pick the correct past tense usage:", options: ["He didn't went to work yesterday.", "He didn't go to work yesterday.", "He didn't goes to work yesterday."], answer: 1 },
+      { q: "Choose the right sentence:", options: ["They enjoys party.", "They enjoy the party.", "They enjoying the party."], answer: 1 },
+      { q: "Correct the tense in this sentence:", options: ["I have visit Paris last year.", "I have visited Paris last year.", "I visited Paris last year."], answer: 2 },
+      { q: "Which is grammatically accurate?", options: ["She don't has any money.", "She hasn't money.", "She doesn't have any money."], answer: 2 },
+      { q: "What is the correct form of the question?", options: ["Where are you last night?", "Where were you last night?", "Where was you last night?"], answer: 1 },
+      { q: "Select the correct sentence:", options: ["We were happy to see them.", "We was happily to see them.", "We were happy see them."], answer: 0 },
+      { q: "Fix the modal verb usage:", options: ["She can dance well.", "She can dances well.", "She cans dance well."], answer: 0 },
+      { q: "Correct this statement:", options: ["They was at cinema.", "They were in the cinema.", "They were on cinema."], answer: 1 },
+      { q: "Pick the right version:", options: ["We going to school by bus.", "We goes to school by bus.", "We go to school by bus."], answer: 2 },// Pronouns
+  { q: "Who gave me this book yesterday?", options: ["His", "Him", "He"], answer: 2 },
+  { q: "Sara looked at _____ in the mirror.", options: ["her", "she", "herself"], answer: 2 },
+  { q: "Can you help _____ with the homework?", options: ["mine", "I", "me"], answer: 2 },
+  { q: "This is my bag. That one is _____.", options: ["my", "mine", "me"], answer: 1 },
+  { q: "We enjoyed _____ at the party.", options: ["ourselves", "we", "us"], answer: 0 },
+  { q: "The teacher gave the books to _____.", options: ["them", "they", "their"], answer: 0 },
+  { q: "I hurt _____ while skating.", options: ["I", "me", "myself"], answer: 2 },
+  { q: "_____ is coming to the party tonight?", options: ["Who", "Whose", "Whom"], answer: 0 },
+  { q: "John and _____ are going to the mall.", options: ["my", "I", "me"], answer: 1 },
+  { q: "She invited Tom and ____ to dinner.", options: ["I", "mine", "me"], answer: 2 }
+];
+
+function submitQuiz() {
+  let score = 0;
+  questions.forEach((question, index) => {
+    const selected = document.querySelector(`input[name=q${index}]:checked`);
+    const resultDiv = document.getElementById(`result${index}`);
+    if (selected) {
+      const selectedIndex = parseInt(selected.value);
+      if (selectedIndex === question.answer) {
+        score++;
+        resultDiv.textContent = "Correct ✅";
+        resultDiv.className = "result correct";
+      } else {
+        resultDiv.innerHTML = `Wrong ❌ - Correct answer: <strong>${question.options[question.answer]}</strong>`;
+        resultDiv.className = "result wrong";
+      }
+    } else {
+      resultDiv.innerHTML = `Not answered ❌ - Correct answer: <strong>${question.options[question.answer]}</strong>`;
+      resultDiv.className = "result wrong";
+    }
+  });
+  document.getElementById("score").innerHTML = `<h3>Your score: ${score}/${questions.length}</h3>`;
+}
+
+function loadQuiz() {
+  const quizContainer = document.getElementById("quiz");
+  questions.forEach((question, index) => {
+    const div = document.createElement("div");
+    div.className = "question";
+    const shuffledOptions = [...question.options];
+    const answerText = question.options[question.answer];
+    shuffledOptions.sort(() => Math.random() - 0.5);
+    question.answer = shuffledOptions.indexOf(answerText);
+    div.innerHTML = `
+      <p><strong>Q${index + 1}:</strong> ${question.q}</p>
+      <div class="options">
+        ${shuffledOptions.map((opt, i) => `
+          <label><input type="radio" name="q${index}" value="${i}"> ${opt}</label>
+        `).join('')}
+      </div>
+      <div id="result${index}" class="result"></div>
+    `;
+    quizContainer.appendChild(div);
+  });
+}
+
+loadQuiz();
+
+  </script>
+</body>
+</html>    }
     .wrong {
       color: red;
     }
@@ -143,3 +265,4 @@
   </script>
 </body>
 </html>
+
