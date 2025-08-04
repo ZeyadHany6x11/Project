@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Grammar Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    .quiz-container {
+      background: white;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .options label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .result {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .correct {
+      color: green;
+    }
+    .wrong {
+      color: red;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h2>English Grammar Quiz - Developed By : Zeyad Hany</h2>
+    <div id="quiz"></div>
+    <button onclick="submitQuiz()">Submit</button>
+    <div id="score"></div>
+  </div>
+
+  <script>
+    const questions = [
+      // 20 grammar questions
+      { q: "He go to school every day.", options: ["He goes to school every day.", "He go to the school every days.", "He going to school every day."], answer: 0 },
+      { q: "They was playing football.", options: ["They were playing football.", "They was played football.", "They were play football."], answer: 0 },
+      { q: "I can to swim very well.", options: ["I can swim very well.", "I can to swims very well.", "I can swimming very well."], answer: 0 },
+      { q: "She don't like coffee.", options: ["She doesn't like coffee.", "She don't likes coffee.", "She didn't like coffee."], answer: 0 },
+      { q: "We was late to the meeting.", options: ["We were late to the meeting.", "We was lateness to meeting.", "We was late in meeting."], answer: 0 },
+      { q: "Does he goes to the gym?", options: ["Does he go to the gym?", "Do he goes to the gym?", "Does he going to the gym?"], answer: 0 },
+      { q: "She has two childs.", options: ["She has two children.", "She have two childs.", "She has two child."], answer: 0 },
+      { q: "He didn't knew the answer.", options: ["He didn't know the answer.", "He doesn't knew the answer.", "He didn't knows the answer."], answer: 0 },
+      { q: "There is many cars in the street.", options: ["There are many cars in the street.", "There is many car in the street.", "There are much cars in the street."], answer: 0 },
+      { q: "I'm agree with you.", options: ["I agree with you.", "I am agreed with you.", "I'm agreed you."], answer: 0 },
+      { q: "She can sings beautifully.", options: ["She can sing beautifully.", "She cans sings beautifully.", "She can singing beautifully."], answer: 0 },
+      { q: "He didn't went to work yesterday.", options: ["He didn't go to work yesterday.", "He doesn't go to work yesterday.", "He didn't goes to work yesterday."], answer: 0 },
+      { q: "They enjoys the party.", options: ["They enjoy the party.", "They enjoys party.", "They enjoying the party."], answer: 0 },
+      { q: "I have visited Paris last year.", options: ["I visited Paris last year.", "I have been visited Paris last year.", "I have visit Paris last year."], answer: 0 },
+      { q: "She don't has any money.", options: ["She doesn't have any money.", "She don't have money.", "She hasn't money."], answer: 0 },
+      { q: "Where you was last night?", options: ["Where were you last night?", "Where are you last night?", "Where was you last night?"], answer: 0 },
+      { q: "We was happy to see them.", options: ["We were happy to see them.", "We was happily to see them.", "We were happy see them."], answer: 0 },
+      { q: "She can to dance well.", options: ["She can dance well.", "She cans dance well.", "She can dances well."], answer: 0 },
+      { q: "They was in the cinema.", options: ["They were in the cinema.", "They was at cinema.", "They were on cinema."], answer: 0 },
+      { q: "We goes to school by bus.", options: ["We go to school by bus.", "We going to school by bus.", "We goes by bus to school."], answer: 0 },
+
+      // 10 pronoun questions
+      { q: "_____ gave me this book yesterday.", options: ["He", "Him", "His"], answer: 0 },
+      { q: "Sara looked at _____ in the mirror.", options: ["herself", "her", "she"], answer: 0 },
+      { q: "Can you help _____ with the homework?", options: ["me", "I", "mine"], answer: 0 },
+      { q: "This is my bag. That one is _____.", options: ["mine", "my", "me"], answer: 0 },
+      { q: "We enjoyed _____ at the party.", options: ["ourselves", "us", "we"], answer: 0 },
+      { q: "The teacher gave the books to _____.", options: ["them", "they", "their"], answer: 0 },
+      { q: "I hurt _____ while skating.", options: ["myself", "me", "I"], answer: 0 },
+      { q: "_____ is coming to the party tonight?", options: ["Who", "Whom", "Whose"], answer: 0 },
+      { q: "John and _____ are going to the mall.", options: ["I", "me", "my"], answer: 0 },
+      { q: "She invited Tom and ____ to dinner.", options: ["me", "I", "mine"], answer: 0 }
+    ];
+
+    function submitQuiz() {
+      let score = 0;
+      questions.forEach((question, index) => {
+        const selected = document.querySelector(`input[name=q${index}]:checked`);
+        const resultDiv = document.getElementById(`result${index}`);
+        if (selected) {
+          if (parseInt(selected.value) === question.answer) {
+            score++;
+            resultDiv.textContent = "Correct";
+            resultDiv.className = "result correct";
+          } else {
+            const correctAnswer = question.options[question.answer];
+            resultDiv.textContent = `Wrong — Correct answer: ${correctAnswer}`;
+            resultDiv.className = "result wrong";
+          }
+        } else {
+          const correctAnswer = question.options[question.answer];
+          resultDiv.textContent = `Not answered — Correct answer: ${correctAnswer}`;
+          resultDiv.className = "result wrong";
+        }
+      });
+      document.getElementById("score").innerHTML = `<h3>Your score: ${score}/${questions.length}</h3>`;
+    }
+
+    function loadQuiz() {
+      const quizContainer = document.getElementById("quiz");
+      questions.forEach((question, index) => {
+        const div = document.createElement("div");
+        div.className = "question";
+        div.innerHTML = `
+          <p><strong>Q${index + 1}:</strong> ${question.q}</p>
+          <div class="options">
+            ${question.options.map((opt, i) => `
+              <label><input type="radio" name="q${index}" value="${i}"> ${opt}</label>
+            `).join('')}
+          </div>
+          <div id="result${index}" class="result"></div>
+        `;
+        quizContainer.appendChild(div);
+      });
+    }
+
+    loadQuiz();
+  </script>
+</body>
+</html>
